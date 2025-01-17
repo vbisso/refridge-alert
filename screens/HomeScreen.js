@@ -23,7 +23,7 @@ const HomeScreen = () => {
         ...food,
         expDate: new Date(food.expDate), // Convert string to Date object
       }));
-      console.log("Foods loaded:", foodsWithDates);
+      //console.log("Foods loaded:", foodsWithDates);
       setFoods(foodsWithDates);
     } else {
       console.log("No foods stored.");
@@ -32,9 +32,11 @@ const HomeScreen = () => {
 
   //saving foods to local storage
   const saveFoods = async (food) => {
+    //console.log(food);
     const newFoods = [...foods, food]; //adds the new food to the existing array of foods
     setFoods(newFoods); //sets the state of the component to the new array of foods
     await AsyncStorage.setItem("foods", JSON.stringify(newFoods)); //saves the new array of foods to the local storage
+    //console.log(JSON.stringify(newFoods));
   };
 
   const onDelete = async (index) => {
@@ -45,7 +47,7 @@ const HomeScreen = () => {
 
   return (
     <ScrollView>
-      <Text>Home Screen</Text>
+      <Text>putamadre</Text>
       <FoodForm onSave={saveFoods} />
       <FoodList foods={foods} onDelete={onDelete} />
     </ScrollView>

@@ -2,10 +2,12 @@ import React from "react";
 import { View, Text, Button } from "react-native";
 
 const FoodList = ({ foods, onDelete }) => {
-  if (!foods || !Array.isArray(foods)) {
+  if (foods.length === 0) {
     return (
       <View>
         <Text>No foods found.</Text>
+        <Text>Start Adding your items!</Text>
+        <Button title="Add Food" onPress={() => {}} />
       </View>
     );
   }
