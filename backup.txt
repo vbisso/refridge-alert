@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { ScrollView, View, Text, Button, StyleSheet } from "react-native";
+import { ScrollView, View, Text } from "react-native"; 
+import { Picker } from "@react-native-picker/picker"; // Import Picker
 import FoodForm from "../components/FoodForm";
 import FoodList from "../components/FoodList";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const HomeScreen = () => {
   const [foods, setFoods] = useState([]);
-  const [sortBy, setSortBy] = useState("expDate");
+  const [sortBy, setSortBy] = useState("expDate"); // Default sorting
 
   useEffect(() => {
     loadFoods();
@@ -55,59 +56,25 @@ const HomeScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      {/* Sorting Buttons */}
-      <View style={styles.sortContainer}>
-        <Text style={styles.sortText}>Sort Foods By:</Text>
-        <Button
-          title="Expiration Date"
-          onPress={() => setSortBy("expDate")}
-        />
-        <Button
-          title="Category"
-          onPress={() => setSortBy("category")}
-        />
-        <Button
-          title="Name"
-          onPress={() => setSortBy("name")}
-        />
-      </View>
-
-      {/* Food Form */}
-      <FoodForm onSave={saveFoods} />
-
-      {/* Scrollable Food List */}
-      <ScrollView style={styles.scrollView} contentContainerStyle={styles.scrollContent}>
+    <View>
+      <ScrollView>
+        <Text></Text>
+        
         <FoodList foods={foods} onDelete={onDelete} />
       </ScrollView>
+
+      <Text>Sort Foods By:</Text>
+      <Picker
+        selectedValue={sortBy}
+        onValueChange={(itemValue) => setSortBy(itemValue)}
+        style={{ height: 25, width: 200 }}
+      >
+        <Picker.Item label="Expiration Date" value="expDate" />
+        <Picker.Item label="Category" value="category" />
+        <Picker.Item label="Name" value="name" />
+      </Picker>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1, 
-    paddingTop: 0, // Add padding at the top for spacing
-  },
-  scrollView: {
-    flex: 1, 
-  },
-  scrollContent: {
-    flexGrow: 1, 
-  },
-  sortContainer: {
-    padding: 20, // More spacing
-    backgroundColor: "#f8f8f8",
-    borderTopWidth: 1,
-    borderColor: "#ddd",
-    height: 140, // Adjusted height for buttons
-    justifyContent: "center", // Center content vertically
-  },
-  sortText: {
-    fontSize: 20, // Bigger label text
-    fontWeight: "bold", 
-    marginBottom: 0, 
-  },
-});
 
 export default HomeScreen;
