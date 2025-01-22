@@ -5,6 +5,7 @@ import FoodList from "../components/FoodList";
 import FoodModal from "../components/FoodModal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Svg, { Path } from "react-native-svg";
+import { ScrollView } from "react-native-gesture-handler";
 
 const HomeScreen = () => {
   const [foods, setFoods] = useState([]);
@@ -47,10 +48,10 @@ const HomeScreen = () => {
 
   return (
     <View style={style.container}>
-      <View style={style.FoodList}>
+      <ScrollView style={style.FoodList}>
         <Text>Home Screen</Text>
         <FoodList foods={foods} onDelete={onDelete} />
-      </View>
+      </ScrollView>
 
       <View style={style.footerContainer}>
         <View style={style.footer}>

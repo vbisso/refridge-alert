@@ -12,6 +12,7 @@ const FoodForm = ({ onSave, onClose }) => {
       onSave({ name, category, expDate: new Date(date) });
       setName("");
       setCategory("");
+      onClose();
     }
   };
   const handleCancel = () => {

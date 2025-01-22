@@ -33,7 +33,7 @@ const FoodModal = ({ visible, onClose, onSave }) => {
       tension: 0,
       useNativeDriver: true,
     }).start(() => {
-      onClose(); //calls the parent element in homescreen to close. this is where the modal can be hidden outside the component
+      onClose();
     });
   };
 
