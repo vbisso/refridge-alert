@@ -1,19 +1,38 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image, Button } from "react-native";
 import FoodForm from "../components/FoodForm";
 import FoodList from "../components/FoodList";
 import FoodModal from "../components/FoodModal";
+import FilterModal from "../components/FilterModal"
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Svg, { Path } from "react-native-svg";
 import { ScrollView } from "react-native-gesture-handler";
 
 const HomeScreen = () => {
   const [foods, setFoods] = useState([]);
+  const [sortBy, setSortBy] = useState("expDate");
   const [modalVisible, setModalVisible] = useState(false); // state to control the visibility of the food form modal
 
   useEffect(() => {
     loadFoods();
   }, []);
+
+  useEffect(() => {
+    setFoods((prevFoods) => sortFoods(prevFoods, sortBy));
+  }, [sortBy]);
+
+
+  const sortFoods = (foods, criterion) => {
+    return [...foods].sort((a, b) => {
+      if (criterion === "expDate") {
+        return new Date(a.expDate) - new Date(b.expDate);
+      } else if (criterion === "category") {
+        return a.category.localeCompare(b.category);
+      } else if (criterion === "name") {
+        return a.name.localeCompare(b.name);
+      }
+      return 0;
+    });
+  };
 
   //loads foods from async storage
   const loadFoods = async () => {
@@ -48,6 +67,24 @@ const HomeScreen = () => {
 
   return (
     <View style={style.container}>
+
+      <View style={styles.sortContainer}>
+        <Text style={styles.sortText}>Sort Foods By:</Text>
+        <Button
+          title="Expiration Date"
+          onPress={() => setSortBy("expDate")}
+        />
+        <Button
+          title="Category"
+          onPress={() => setSortBy("category")}
+        />
+        <Button
+          title="Name"
+          onPress={() => setSortBy("name")}
+        />
+      </View>
+
+      
       <ScrollView style={style.FoodList}>
         <Text>Home Screen</Text>
         <FoodList foods={foods} onDelete={onDelete} />
@@ -149,6 +186,32 @@ const style = StyleSheet.create({
     backgroundColor: "#5cb85c",
     paddingTop: 15,
     paddingBottom: 30,
+  },
+});
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1, 
+    paddingTop: 0, // Add padding at the top for spacing
+  },
+  scrollView: {
+    flex: 1, 
+  },
+  scrollContent: {
+    flexGrow: 1, 
+  },
+  sortContainer: {
+    padding: 20, // More spacing
+    backgroundColor: "#f8f8f8",
+    borderTopWidth: 1,
+    borderColor: "#ddd",
+    height: 140, // Adjusted height for buttons
+    justifyContent: "center", // Center content vertically
+  },
+  sortText: {
+    fontSize: 20, // Bigger label text
+    fontWeight: "bold", 
+    marginBottom: 0, 
   },
 });
 
