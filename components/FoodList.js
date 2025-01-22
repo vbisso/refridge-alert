@@ -7,7 +7,6 @@ const FoodList = ({ foods, onDelete }) => {
       <View>
         <Text>No foods found.</Text>
         <Text>Start Adding your items!</Text>
-        <Button title="Add Food" onPress={() => {}} />
       </View>
     );
   }

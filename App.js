@@ -7,8 +7,8 @@ export default function App() {
   const Stack = createStackNavigator();
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Navigator initialRouteName="Refridge-Alert">
+        <Stack.Screen name="Refridge-Alert" component={HomeScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
