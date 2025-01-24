@@ -13,7 +13,7 @@ import {
 const { height } = Dimensions.get("window");
 
 const FilterModal = ({ visible, onClose, onSortChange }) => {
-  const [slideAnimation] = useState(new Animated.Value(height)); 
+  const [slideAnimation] = useState(new Animated.Value(height));
 
   useEffect(() => {
     if (visible) {
@@ -47,14 +47,27 @@ const FilterModal = ({ visible, onClose, onSortChange }) => {
       visible={visible}
       onRequestClose={onClose} // Ensures Android back button also closes the modal
     >
-      <TouchableOpacity style={styles.overlay} activeOpacity={1} onPress={onClose}>
+      <TouchableOpacity
+        style={styles.overlay}
+        activeOpacity={1}
+        onPress={onClose}
+      >
         <Animated.View
-          style={[styles.modalContent, { transform: [{ translateY: slideAnimation }] }]}
+          style={[
+            styles.modalContent,
+            { transform: [{ translateY: slideAnimation }] },
+          ]}
         >
           <Text style={styles.text}>Filter Options</Text>
 
-          <Button title="Sort by Expiration Date" onPress={() => onSortChange("expDate")} />
-          <Button title="Sort by Category" onPress={() => onSortChange("category")} />
+          <Button
+            title="Sort by Expiration Date"
+            onPress={() => onSortChange("expDate")}
+          />
+          <Button
+            title="Sort by Category"
+            onPress={() => onSortChange("category")}
+          />
           <Button title="Sort by Name" onPress={() => onSortChange("name")} />
 
           <TouchableOpacity onPress={onClose} style={styles.closeButton}>
