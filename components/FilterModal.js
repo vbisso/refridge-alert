@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Modal,
   Animated,
@@ -7,14 +7,19 @@ import {
   Text,
   Dimensions,
   View,
+  Button,
 } from "react-native";
-import FoodForm from "./FoodForm";
 
 const { height } = Dimensions.get("window");
 
-const FoodModal = ({ visible, onClose, onSave }) => {
-  const [slideAnimation] = useState(new Animated.Value(1000)); // starts off-screen
-  const [isModalVisible, setIsModalVisible] = useState(visible);
+const FilterModal = ({ visible, onClose, onSortChange }) => {
+  const [slideAnimation] = useState(new Animated.Value(1000)); 
+
+  useEffect(() => {
+    if (visible) {
+      openModal();
+    }
+  }, [visible]);
 
   const openModal = () => {
     Animated.spring(slideAnimation, {
@@ -26,46 +31,39 @@ const FoodModal = ({ visible, onClose, onSave }) => {
   };
 
   const closeModal = () => {
-    setIsModalVisible(false); //closing modal (includes the blurred background)
     Animated.spring(slideAnimation, {
-      toValue: 1000,
-      friction: 0,
-      tension: 0,
+      toValue: 600,
+      friction: 300,
+      tension: 300,
       useNativeDriver: true,
     }).start(() => {
-      onClose();
+      onClose(); // Ensure HomeScreen updates the modal state only after animation completes
     });
   };
-
-  //open modal when visible changes
-  React.useEffect(() => {
-    if (visible) {
-      setIsModalVisible(true);
-      openModal();
-    }
-  }, [visible]);
 
   return (
     <Modal
       animationType="fade"
       transparent={true}
-      visible={isModalVisible}
+      visible={visible}
       onRequestClose={closeModal}
     >
-      <TouchableOpacity style={styles.overlay} activeOpacity={1}>
+      <TouchableOpacity style={styles.overlay} activeOpacity={1} onPress={closeModal}>
         <Animated.View
           style={[
             styles.modalContent,
-            {
-              height: height * 0.8,
-              transform: [{ translateY: slideAnimation }],
-              bottom: 0,
-              position: "absolute",
-            },
+            { transform: [{ translateY: slideAnimation }] },
           ]}
         >
-          <Text style={styles.text}>Add Food Item</Text>
-          <FoodForm onSave={onSave} onClose={closeModal} />
+          <Text style={styles.text}>Filter Options</Text>
+
+          <Button title="Sort by Expiration Date" onPress={() => onSortChange("expDate")} />
+          <Button title="Sort by Category" onPress={() => onSortChange("category")} />
+          <Button title="Sort by Name" onPress={() => onSortChange("name")} />
+
+          <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
+            <Text style={styles.closeText}>Close</Text>
+          </TouchableOpacity>
         </Animated.View>
       </TouchableOpacity>
     </Modal>
@@ -75,24 +73,31 @@ const FoodModal = ({ visible, onClose, onSave }) => {
 const styles = StyleSheet.create({
   overlay: {
     flex: 1,
-    justifyContent: "flex-end",
-    alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  modalContent: {
-    width: "100%",
-    backgroundColor: "white",
-    padding: 20,
     justifyContent: "center",
     alignItems: "center",
-    borderTopLeftRadius: 15,
-    borderTopRightRadius: 15,
+  },
+  modalContent: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 10,
+    width: "80%",
+    alignItems: "center",
   },
   text: {
     fontSize: 18,
-    marginBottom: 20,
-    textAlign: "center",
+    marginBottom: 15,
+  },
+  closeButton: {
+    marginTop: 15,
+    padding: 10,
+    backgroundColor: "#ff4444",
+    borderRadius: 5,
+  },
+  closeText: {
+    color: "white",
+    fontWeight: "bold",
   },
 });
 
-export default FoodModal;
+export default FilterModal;

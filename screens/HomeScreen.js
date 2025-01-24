@@ -1,28 +1,35 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image, Button } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Button, ScrollView } from "react-native";
 import FoodForm from "../components/FoodForm";
 import FoodList from "../components/FoodList";
 import FoodModal from "../components/FoodModal";
-import FilterModal from "../components/FilterModal"
+import FilterModal from "../components/FilterModal";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { ScrollView } from "react-native-gesture-handler";
 
 const HomeScreen = () => {
   const [foods, setFoods] = useState([]);
   const [sortBy, setSortBy] = useState("expDate");
-  const [modalVisible, setModalVisible] = useState(false); // state to control the visibility of the food form modal
+  const [modalVisible, setModalVisible] = useState(false);
+  const [filterModalVisible, setFilterModalVisible] = useState(false);
+  const [isFilterVisible, setIsFilterVisible] = useState(false);
+  const [sortCriteria, setSortCriteria] = useState(null);
 
   useEffect(() => {
     loadFoods();
   }, []);
 
   useEffect(() => {
-    setFoods((prevFoods) => sortFoods(prevFoods, sortBy));
+    setFoods((prevFoods) => sortFoods([...prevFoods], sortBy));
   }, [sortBy]);
 
+  const handleSortChange = (criterion) => {
+    console.log("Sorting by:", criterion);
+    setSortBy(criterion);  // Update sorting criteria
+    setIsFilterVisible(false); // Close the modal after selecting
+  };
 
   const sortFoods = (foods, criterion) => {
-    return [...foods].sort((a, b) => {
+    return foods.sort((a, b) => {
       if (criterion === "expDate") {
         return new Date(a.expDate) - new Date(b.expDate);
       } else if (criterion === "category") {
@@ -34,130 +41,85 @@ const HomeScreen = () => {
     });
   };
 
-  //loads foods from async storage
   const loadFoods = async () => {
-    const storedFoods = await AsyncStorage.getItem("foods");
-
-    if (storedFoods) {
-      const foodsWithDates = JSON.parse(storedFoods).map((food) => ({
-        ...food,
-        expDate: new Date(food.expDate), // Convert string to Date object
-      }));
-      //console.log("Foods loaded:", foodsWithDates);
-      setFoods(foodsWithDates);
-    } else {
-      console.log("No foods stored.");
+    try {
+      const storedFoods = await AsyncStorage.getItem("foods");
+      if (storedFoods) {
+        const foodsWithDates = JSON.parse(storedFoods).map((food) => ({
+          ...food,
+          expDate: new Date(food.expDate),
+        }));
+        setFoods(sortFoods(foodsWithDates, sortBy));
+      }
+    } catch (error) {
+      console.error("Error loading foods:", error);
     }
   };
 
-  //saving foods to local storage
   const saveFoods = async (food) => {
-    //console.log(food);
-    const newFoods = [...foods, food]; //adds the new food to the existing array of foods
-    setFoods(newFoods); //sets the state of the component to the new array of foods
-    await AsyncStorage.setItem("foods", JSON.stringify(newFoods)); //saves the new array of foods to the local storage
-    setModalVisible(false);
+    try {
+      const newFoods = [...foods, { ...food, expDate: new Date(food.expDate) }];
+      setFoods(sortFoods(newFoods, sortBy));
+      await AsyncStorage.setItem("foods", JSON.stringify(newFoods));
+      setModalVisible(false);
+    } catch (error) {
+      console.error("Error saving food:", error);
+    }
   };
 
   const onDelete = async (index) => {
-    const newFoods = foods.filter((_, i) => i !== index);
-    setFoods(newFoods);
-    await AsyncStorage.setItem("foods", JSON.stringify(newFoods));
+    try {
+      const newFoods = foods.filter((_, i) => i !== index);
+      setFoods(newFoods);
+      await AsyncStorage.setItem("foods", JSON.stringify(newFoods));
+    } catch (error) {
+      console.error("Error deleting food:", error);
+    }
   };
 
   return (
     <View style={style.container}>
+      {/* <View style={style.sortContainer}>
+        <Text style={style.sortText}>Sort Foods By:</Text>
+        <View style={style.buttonContainer}>
+          <Button title="Expiration Date" onPress={() => setSortBy("expDate")} />
+          <Button title="Category" onPress={() => setSortBy("category")} />
+          <Button title="Name" onPress={() => setSortBy("name")} />
+        </View>
+      </View> */}
 
-      <View style={styles.sortContainer}>
-        <Text style={styles.sortText}>Sort Foods By:</Text>
-        <Button
-          title="Expiration Date"
-          onPress={() => setSortBy("expDate")}
-        />
-        <Button
-          title="Category"
-          onPress={() => setSortBy("category")}
-        />
-        <Button
-          title="Name"
-          onPress={() => setSortBy("name")}
-        />
-      </View>
-
-      
-      <ScrollView style={style.FoodList}>
+      <ScrollView style={style.foodList}>
         <Text>Home Screen</Text>
+        
         <FoodList foods={foods} onDelete={onDelete} />
       </ScrollView>
 
       <View style={style.footerContainer}>
         <View style={style.footer}>
-          <TouchableOpacity
-            //onPress={() => setModalVisible(true)}
-            style={{
-              paddingVertical: 10,
-              paddingHorizontal: 5,
-              borderRadius: 10,
-              width: 50,
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 30,
-              }}
-            >
-              ⚙️
-            </Text>
+          <TouchableOpacity style={style.iconButton}>
+            <Text style={style.iconText}>⚙️</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={() => setModalVisible(true)}
-            style={{
-              backgroundColor: "white",
-              paddingVertical: 10,
-              paddingHorizontal: 5,
-              borderRadius: 10,
-              width: 50,
-            }}
-          >
-            <Text
-              style={{
-                color: "black",
-                fontSize: 30,
-                textAlign: "center",
-              }}
-            >
-              +
-            </Text>
+          <TouchableOpacity onPress={() => setModalVisible(true)} style={style.addButton}>
+            <Text style={style.addButtonText}>+</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity
-            //onPress={() => setModalVisible(true)}
-            style={{
-              backgroundColor: "#5cb85c",
-              paddingVertical: 10,
-              paddingHorizontal: 5,
-              borderRadius: 10,
-              width: 50,
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <Text
-              style={{
-                fontSize: 30,
-              }}
-            >
-              🔎
-            </Text>
+          {/* <TouchableOpacity onPress={() => setFilterModalVisible(true)} style={style.searchButton}>
+            <Text style={style.iconText}>🔎</Text>
+            <Button title="Open Filter" onPress={() => setIsFilterVisible(true)} />
+
+          </TouchableOpacity> */}
+          <TouchableOpacity onPress={() => setIsFilterVisible(true)} style={style.searchButton}>
+            <Text style={style.iconText}>🔎</Text> 
           </TouchableOpacity>
         </View>
       </View>
 
-      <FoodModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        onSave={saveFoods}
+      <FoodModal visible={modalVisible} onClose={() => setModalVisible(false)} onSave={saveFoods} />
+      <FilterModal 
+        visible={isFilterVisible} 
+        onClose={() => setIsFilterVisible(false)} 
+        onSortChange={handleSortChange} 
       />
     </View>
   );
@@ -167,10 +129,26 @@ const style = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-    height: "100%",
   },
-  FoodList: {
+  foodList: {
     padding: 15,
+  },
+  sortContainer: {
+    padding: 20,
+    backgroundColor: "#f8f8f8",
+    borderBottomWidth: 1,
+    borderColor: "#ddd",
+    height: 140,
+    justifyContent: "center",
+  },
+  sortText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  buttonContainer: {
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
   footerContainer: {
     position: "absolute",
@@ -182,35 +160,40 @@ const style = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     bottom: 0,
-    backgroundColor: "#5cb85c",
+    backgroundColor: "#5CB85C",
     paddingTop: 15,
     paddingBottom: 30,
   },
-});
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1, 
-    paddingTop: 0, // Add padding at the top for spacing
+  iconButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    borderRadius: 10,
+    width: 50,
   },
-  scrollView: {
-    flex: 1, 
+  iconText: {
+    fontSize: 30,
+    textAlign: "center",
   },
-  scrollContent: {
-    flexGrow: 1, 
+  addButton: {
+    backgroundColor: "white",
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    borderRadius: 10,
+    width: 50,
   },
-  sortContainer: {
-    padding: 20, // More spacing
-    backgroundColor: "#f8f8f8",
-    borderTopWidth: 1,
-    borderColor: "#ddd",
-    height: 140, // Adjusted height for buttons
-    justifyContent: "center", // Center content vertically
+  addButtonText: {
+    color: "black",
+    fontSize: 30,
+    textAlign: "center",
   },
-  sortText: {
-    fontSize: 20, // Bigger label text
-    fontWeight: "bold", 
-    marginBottom: 0, 
+  searchButton: {
+    backgroundColor: "#5cb85c",
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    borderRadius: 10,
+    width: 50,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
