@@ -50,7 +50,7 @@ const FoodForm = ({ onSave, onClose }) => {
         <View style={styles.datePicker}>
           <Text style={styles.datePickerText}>Exp Date:</Text>
           <DateTimePicker
-            value={date}
+            value={date} //value={date}
             mode="date"
             display="default"
             onChange={(event, selectedDate) => {
