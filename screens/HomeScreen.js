@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Button, ScrollView } from "react-native";
+import { View, Text, styleheet, TouchableOpacity, Button, ScrollView } from "react-native";
 import FoodForm from "../components/FoodForm";
 import FoodList from "../components/FoodList";
 import FoodModal from "../components/FoodModal";
@@ -78,39 +78,39 @@ const HomeScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      {/* <View style={styles.sortContainer}>
-        <Text style={styles.sortText}>Sort Foods By:</Text>
-        <View style={styles.buttonContainer}>
+    <View style={style.container}>
+      {/* <View style={style.sortContainer}>
+        <Text style={style.sortText}>Sort Foods By:</Text>
+        <View style={style.buttonContainer}>
           <Button title="Expiration Date" onPress={() => setSortBy("expDate")} />
           <Button title="Category" onPress={() => setSortBy("category")} />
           <Button title="Name" onPress={() => setSortBy("name")} />
         </View>
       </View> */}
 
-      <ScrollView style={styles.foodList}>
+      <ScrollView style={style.foodList}>
         <Text>Home Screen</Text>
         
         <FoodList foods={foods} onDelete={onDelete} />
       </ScrollView>
 
-      <View style={styles.footerContainer}>
-        <View style={styles.footer}>
-          <TouchableOpacity style={styles.iconButton}>
-            <Text style={styles.iconText}>⚙️</Text>
+      <View style={style.footerContainer}>
+        <View style={style.footer}>
+          <TouchableOpacity style={style.iconButton}>
+            <Text style={style.iconText}>⚙️</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => setModalVisible(true)} style={styles.addButton}>
-            <Text style={styles.addButtonText}>+</Text>
+          <TouchableOpacity onPress={() => setModalVisible(true)} style={style.addButton}>
+            <Text style={style.addButtonText}>+</Text>
           </TouchableOpacity>
 
-          {/* <TouchableOpacity onPress={() => setFilterModalVisible(true)} style={styles.searchButton}>
-            <Text style={styles.iconText}>🔎</Text>
+          {/* <TouchableOpacity onPress={() => setFilterModalVisible(true)} style={style.searchButton}>
+            <Text style={style.iconText}>🔎</Text>
             <Button title="Open Filter" onPress={() => setIsFilterVisible(true)} />
 
           </TouchableOpacity> */}
-          <TouchableOpacity onPress={() => setIsFilterVisible(true)} style={styles.searchButton}>
-            <Text style={styles.iconText}>🔎</Text> 
+          <TouchableOpacity onPress={() => setIsFilterVisible(true)} style={style.searchButton}>
+            <Text style={style.iconText}>🔎</Text> 
           </TouchableOpacity>
         </View>
       </View>
@@ -125,7 +125,7 @@ const HomeScreen = () => {
   );
 };
 
-const styles = StyleSheet.create({
+const style = styleheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
