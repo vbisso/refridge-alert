@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text, Button } from "react-native";
+import IconFilter from "./IconFilter";
 
 const FoodList = ({ foods, onDelete }) => {
   if (foods.length === 0) {
@@ -15,7 +16,7 @@ const FoodList = ({ foods, onDelete }) => {
       {foods.map((food, index) => (
         <View key={index}>
           <Text>{food.name}</Text>
-          <Text>{food.category}</Text>
+          <IconFilter category={food.category}/>
           <Text>Exp. Date: {food.expDate.toDateString()}</Text>
           <Button title="Delete" onPress={() => onDelete(index)} />
         </View>
