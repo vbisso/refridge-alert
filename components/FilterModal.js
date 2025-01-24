@@ -13,11 +13,13 @@ import {
 const { height } = Dimensions.get("window");
 
 const FilterModal = ({ visible, onClose, onSortChange }) => {
-  const [slideAnimation] = useState(new Animated.Value(1000)); 
+  const [slideAnimation] = useState(new Animated.Value(height)); 
 
   useEffect(() => {
     if (visible) {
       openModal();
+    } else {
+      closeModal();
     }
   }, [visible]);
 
@@ -31,14 +33,11 @@ const FilterModal = ({ visible, onClose, onSortChange }) => {
   };
 
   const closeModal = () => {
-    Animated.spring(slideAnimation, {
-      toValue: 600,
-      friction: 300,
-      tension: 300,
+    Animated.timing(slideAnimation, {
+      toValue: height,
+      duration: 300,
       useNativeDriver: true,
-    }).start(() => {
-      onClose(); // Ensure HomeScreen updates the modal state only after animation completes
-    });
+    }).start();
   };
 
   return (
@@ -46,14 +45,11 @@ const FilterModal = ({ visible, onClose, onSortChange }) => {
       animationType="fade"
       transparent={true}
       visible={visible}
-      onRequestClose={closeModal}
+      onRequestClose={onClose} // Ensures Android back button also closes the modal
     >
-      <TouchableOpacity style={styles.overlay} activeOpacity={1} onPress={closeModal}>
+      <TouchableOpacity style={styles.overlay} activeOpacity={1} onPress={onClose}>
         <Animated.View
-          style={[
-            styles.modalContent,
-            { transform: [{ translateY: slideAnimation }] },
-          ]}
+          style={[styles.modalContent, { transform: [{ translateY: slideAnimation }] }]}
         >
           <Text style={styles.text}>Filter Options</Text>
 
@@ -61,7 +57,7 @@ const FilterModal = ({ visible, onClose, onSortChange }) => {
           <Button title="Sort by Category" onPress={() => onSortChange("category")} />
           <Button title="Sort by Name" onPress={() => onSortChange("name")} />
 
-          <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
+          <TouchableOpacity onPress={onClose} style={styles.closeButton}>
             <Text style={styles.closeText}>Close</Text>
           </TouchableOpacity>
         </Animated.View>
