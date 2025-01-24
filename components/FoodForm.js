@@ -49,7 +49,7 @@ const FoodForm = ({ onSave, onClose }) => {
 
         <View style={styles.datePicker}>
           <Text style={styles.datePickerText}>Exp Date:</Text>
-          <DateTimePicker
+          <DateTimePicker // Use DateTimePicker from @react-native-community/datetimepicker
             value={date}
             mode="date"
             display="default"
