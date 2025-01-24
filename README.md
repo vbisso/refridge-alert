@@ -32,7 +32,7 @@ Libraries:
 
 # Future Work
 
-{Make a list of things that you need to fix, improve, and add in the future.}
+
 * Enhanced Styling: Improve the UI/UX to make the app more visually appealing and user-friendly.
 * Notification System: Implement a notification system to remind users of foods that are about to expire.
 * Settings Screen: Implement a second screen that allows users personalize their notifications settings (allows users to choose when they want to receive notifications). 
