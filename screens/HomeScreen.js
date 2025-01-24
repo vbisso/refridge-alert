@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, styleheet, TouchableOpacity, Button, ScrollView } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Button, ScrollView } from "react-native";
 import FoodForm from "../components/FoodForm";
 import FoodList from "../components/FoodList";
 import FoodModal from "../components/FoodModal";
@@ -125,7 +125,7 @@ const HomeScreen = () => {
   );
 };
 
-const style = styleheet.create({
+const style = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
@@ -156,9 +156,11 @@ const style = styleheet.create({
     width: "100%",
   },
   footer: {
+    display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
-    backgroundColor: "#5cb85c",
+    bottom: 0,
+    backgroundColor: "#5CB85C",
     paddingTop: 15,
     paddingBottom: 30,
   },
