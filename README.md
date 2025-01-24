@@ -13,6 +13,7 @@ The app allows users to:
 
 The app was built using the following tools and technologies:
 * React Native: For building the app UI and functionality.
+* Expo: A powerful platform for building React Native applications. Expo provides a robust development environment that simplifies the process of creating, testing, and deploying mobile apps.
 * Node.js: As the runtime environment to manage the React Native project dependencies and development server.
 * React Native: For creating and running the project.
 * AsyncStorage: To enable local data persistence.
