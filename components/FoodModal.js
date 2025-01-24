@@ -64,7 +64,6 @@ const FoodModal = ({ visible, onClose, onSave }) => {
             },
           ]}
         >
-          <Text style={styles.text}>Add Food Item</Text>
           <FoodForm onSave={onSave} onClose={closeModal} />
         </Animated.View>
       </TouchableOpacity>
@@ -83,15 +82,9 @@ const styles = StyleSheet.create({
     width: "100%",
     backgroundColor: "white",
     padding: 20,
-    justifyContent: "center",
     alignItems: "center",
     borderTopLeftRadius: 15,
     borderTopRightRadius: 15,
-  },
-  text: {
-    fontSize: 18,
-    marginBottom: 20,
-    textAlign: "center",
   },
 });
 

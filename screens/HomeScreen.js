@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Button, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Button,
+  ScrollView,
+} from "react-native";
 import FoodForm from "../components/FoodForm";
 import FoodList from "../components/FoodList";
 import FoodModal from "../components/FoodModal";
@@ -24,7 +31,7 @@ const HomeScreen = () => {
 
   const handleSortChange = (criterion) => {
     console.log("Sorting by:", criterion);
-    setSortBy(criterion);  // Update sorting criteria
+    setSortBy(criterion); // Update sorting criteria
     setIsFilterVisible(false); // Close the modal after selecting
   };
 
@@ -89,8 +96,6 @@ const HomeScreen = () => {
       </View> */}
 
       <ScrollView style={style.foodList}>
-        <Text>Home Screen</Text>
-        
         <FoodList foods={foods} onDelete={onDelete} />
       </ScrollView>
 
@@ -100,7 +105,10 @@ const HomeScreen = () => {
             <Text style={style.iconText}>⚙️</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => setModalVisible(true)} style={style.addButton}>
+          <TouchableOpacity
+            onPress={() => setModalVisible(true)}
+            style={style.addButton}
+          >
             <Text style={style.addButtonText}>+</Text>
           </TouchableOpacity>
 
@@ -109,17 +117,24 @@ const HomeScreen = () => {
             <Button title="Open Filter" onPress={() => setIsFilterVisible(true)} />
 
           </TouchableOpacity> */}
-          <TouchableOpacity onPress={() => setIsFilterVisible(true)} style={style.searchButton}>
-            <Text style={style.iconText}>🔎</Text> 
+          <TouchableOpacity
+            onPress={() => setIsFilterVisible(true)}
+            style={style.searchButton}
+          >
+            <Text style={style.iconText}>🔎</Text>
           </TouchableOpacity>
         </View>
       </View>
 
-      <FoodModal visible={modalVisible} onClose={() => setModalVisible(false)} onSave={saveFoods} />
-      <FilterModal 
-        visible={isFilterVisible} 
-        onClose={() => setIsFilterVisible(false)} 
-        onSortChange={handleSortChange} 
+      <FoodModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onSave={saveFoods}
+      />
+      <FilterModal
+        visible={isFilterVisible}
+        onClose={() => setIsFilterVisible(false)}
+        onSortChange={handleSortChange}
       />
     </View>
   );
