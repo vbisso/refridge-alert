@@ -21,32 +21,36 @@ const FoodForm = ({ onSave, onClose }) => {
 
   return (
     <View style={styles.container}>
-      <Text>Name:</Text>
       <TextInput
-        style={styles.input}
+        style={styles.nameInput}
         onChangeText={setName}
         value={name}
         placeholder="Item Name"
+        placeholderTextColor={"gray"}
       />
-      <Text>Category:</Text>
       <TextInput
         onChangeText={setCategory}
         value={category}
         placeholder="Category"
       />
-      <Text>Expiration Date:</Text>
-      <DateTimePicker
-        value={date}
-        mode="date"
-        display="default"
-        onChange={(event, selectedDate) => {
-          if (selectedDate) {
-            setDate(selectedDate);
-          }
-        }}
-      />
-      <Button title="Save" onPress={handleSave} />
-      <Button title="Cancel" onPress={handleCancel} />
+      <View style={styles.datePicker}>
+        <Text style={styles.datePickerText}>Exp Date:</Text>
+        <DateTimePicker
+          value={date}
+          mode="date"
+          display="default"
+          onChange={(event, selectedDate) => {
+            if (selectedDate) {
+              setDate(selectedDate);
+            }
+          }}
+        />
+      </View>
+
+      <View style={styles.buttonsContainer}>
+        <Button title="Save" onPress={handleSave} />
+        <Button title="Cancel" onPress={handleCancel} />
+      </View>
     </View>
   );
 };
@@ -56,8 +60,31 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    justifyContent: "center",
   },
-  input: {},
+  nameInput: {
+    borderColor: "gray",
+    borderWidth: 0.2,
+    borderRadius: 8,
+    paddingHorizontal: 80,
+    paddingVertical: 15,
+    marginBottom: 20,
+  },
+  datePicker: {
+    display: "flex",
+    flexDirection: "row",
+    marginTop: 20,
+    marginBottom: 20,
+  },
+  datePickerText: {
+    alignSelf: "center",
+  },
+  buttonsContainer: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "50%",
+  },
 });
 
 export default FoodForm;

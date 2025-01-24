@@ -141,7 +141,6 @@ const style = StyleSheet.create({
     width: "100%",
   },
   footer: {
-    //backgroundColor: "blue",
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-around",
